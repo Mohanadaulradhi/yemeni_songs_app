@@ -81,6 +81,26 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   String _dioError(DioException e) {
+    // أخطاء الاتصال (بدون استجابة من السيرفر)
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+        return 'تعذر الاتصال بالخادم: انتهت مهلة الاتصال. تأكد من اتصالك بالإنترنت.';
+      case DioExceptionType.sendTimeout:
+        return 'تعذر إرسال البيانات: انتهت المهلة. حاول مرة أخرى.';
+      case DioExceptionType.receiveTimeout:
+        return 'تعذر استقبال البيانات: انتهت المهلة. اتصالك بطيء.';
+      case DioExceptionType.connectionError:
+        return 'تعذر الاتصال بالخادم. تأكد من اتصالك بالإنترنت وأن الخادم يعمل.';
+      case DioExceptionType.badCertificate:
+        return 'خطأ في شهادة الأمان. قد يكون الخادم غير آمن.';
+      case DioExceptionType.cancel:
+        return 'تم إلغاء الطلب.';
+      case DioExceptionType.badResponse:
+      // أكمل لفحص رمز الحالة
+      case DioExceptionType.unknown:
+        return 'خطأ غير متوقع في الشبكة. تأكد من اتصالك وحاول مرة أخرى.';
+    }
+
     final code = e.response?.statusCode;
     final data = e.response?.data;
     String? serverMsg;
@@ -108,7 +128,8 @@ class AuthCubit extends Cubit<AuthState> {
       case 429:
         return 'طلبات كثيرة جداً. انتظر دقيقة وحاول مجدداً.';
       default:
-        return serverMsg ?? 'حدث خطأ غير متوقع (رمز: ${code ?? 'غير معروف'}). حاول مرة أخرى.';
+        final errorMsg = serverMsg ?? 'خطأ في الخادم (رمز: ${code ?? 'غير معروف'}).';
+        return '$errorMsg حاول مرة أخرى.';
     }
   }
 
