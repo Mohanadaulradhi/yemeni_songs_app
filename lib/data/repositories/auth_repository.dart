@@ -12,17 +12,18 @@ class AuthRepository {
     required String email,
     required String password,
   }) async {
-    final session = await _appwrite.createSession(
+    await _appwrite.createSession(
       email: email,
       password: password,
     );
 
-    _appwrite.setSession(session['jwt']?.toString() ?? '');
+    final jwt = await _appwrite.createJwt();
+    _appwrite.setSession(jwt);
 
     final user = await _fetchUserWithDocument();
 
     await HiveProvider.saveUser(user.toJson());
-    await HiveProvider.saveToken(session['jwt']?.toString() ?? '');
+    await HiveProvider.saveToken(jwt);
 
     return user;
   }
@@ -38,12 +39,12 @@ class AuthRepository {
       name: name,
     );
 
-    final session = await _appwrite.createSession(
+    await _appwrite.createSession(
       email: email,
       password: password,
     );
 
-    final jwt = session['jwt']?.toString() ?? '';
+    final jwt = await _appwrite.createJwt();
     _appwrite.setSession(jwt);
 
     try {

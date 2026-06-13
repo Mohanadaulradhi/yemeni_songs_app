@@ -3,6 +3,7 @@ import '../../../core/constants/appwrite_constants.dart';
 
 class AppwriteProvider {
   final Dio _dio;
+  String? _cookies;
 
   AppwriteProvider()
       : _dio = Dio(BaseOptions(
@@ -20,6 +21,7 @@ class AppwriteProvider {
 
   void clearSession() {
     _dio.options.headers.remove('X-Appwrite-JWT');
+    _cookies = null;
   }
 
   Future<Map<String, dynamic>> createAccount({
@@ -44,7 +46,22 @@ class AppwriteProvider {
       'email': email,
       'password': password,
     });
+    final rawCookies = res.headers['set-cookie'];
+    if (rawCookies != null && rawCookies.isNotEmpty) {
+      _cookies = rawCookies.join('; ');
+    }
     return res.data as Map<String, dynamic>;
+  }
+
+  Future<String> createJwt() async {
+    final res = await _dio.post(
+      '/account/jwt',
+      options: _cookies != null
+          ? Options(headers: {'Cookie': _cookies!})
+          : null,
+    );
+    final data = res.data as Map<String, dynamic>;
+    return data['jwt']?.toString() ?? '';
   }
 
   Future<void> deleteSession() async {
