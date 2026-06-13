@@ -122,6 +122,7 @@ class AuthRepository {
   }
 
   bool isLoggedIn() {
-    return HiveProvider.getToken() != null;
+    final token = HiveProvider.getToken();
+    return token != null && token.isNotEmpty;
   }
 }
