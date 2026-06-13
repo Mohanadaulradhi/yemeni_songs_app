@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - أغاني يمنية</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div id="app">
+        <aside id="sidebar">
+            <div class="logo">
+                <h2>🎵 أغاني يمنية</h2>
+                <p>لوحة التحكم</p>
+            </div>
+            <nav>
+                <button class="nav-btn active" data-section="dashboard">
+                    <span>📊</span> لوحة المعلومات
+                </button>
+                <button class="nav-btn" data-section="songs">
+                    <span>🎵</span> الأغاني
+                </button>
+                <button class="nav-btn" data-section="artists">
+                    <span>👤</span> الفنانين
+                </button>
+                <button class="nav-btn" data-section="subscriptions">
+                    <span>💳</span> الاشتراكات
+                </button>
+                <button class="nav-btn" data-section="payments">
+                    <span>💰</span> المدفوعات
+                </button>
+            </nav>
+        </aside>
+
+        <main id="main-content">
+            <header>
+                <h1 id="page-title">لوحة المعلومات</h1>
+                <div class="header-actions">
+                    <span id="connection-status">🟢 متصل</span>
+                    <button id="logout-btn" class="btn-secondary">تسجيل خروج</button>
+                </div>
+            </header>
+
+            <section id="section-dashboard" class="section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>إجمالي الأغاني</h3>
+                        <p id="total-songs">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>الفنانين</h3>
+                        <p id="total-artists">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>المشتركين النشطين</h3>
+                        <p id="active-subscriptions">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>إجمالي الإيرادات</h3>
+                        <p id="total-revenue">0 ريال</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section-songs" class="section">
+                <div class="section-header">
+                    <h2>إدارة الأغاني</h2>
+                    <button id="add-song-btn" class="btn-primary">+ إضافة أغنية جديدة</button>
+                </div>
+
+                <div id="song-form" class="form-card" style="display:none;">
+                    <h3>أضف أغنية جديدة</h3>
+                    <form id="songForm">
+                        <div class="form-group">
+                            <label>عنوان الأغنية</label>
+                            <input type="text" id="song-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>الفنان</label>
+                            <select id="song-artist" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>النوع</label>
+                            <select id="song-genre">
+                                <option>صنعاني</option>
+                                <option>عدني</option>
+                                <option>حضرمي</option>
+                                <option>لحجي</option>
+                                <option>تعزي</option>
+                                <option>يافع</option>
+                                <option>شعبي</option>
+                                <option>تراثي</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>ملف الصوت (MP3)</label>
+                            <input type="file" id="song-audio" accept=".mp3,.wav,.ogg">
+                        </div>
+                        <div class="form-group">
+                            <label>صورة الأغنية</label>
+                            <input type="file" id="song-image" accept=".jpg,.png">
+                        </div>
+                        <div class="form-group">
+                            <label>أغنية مميزة (Premium)</label>
+                            <input type="checkbox" id="song-premium">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">حفظ</button>
+                            <button type="button" id="cancel-song-btn" class="btn-secondary">إلغاء</button>
+                        </div>
+                    </form>
+                </div>
+
+                <table id="songs-table">
+                    <thead>
+                        <tr>
+                            <th>العنوان</th>
+                            <th>الفنان</th>
+                            <th>النوع</th>
+                            <th>المدة</th>
+                            <th>مميزة</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="songs-list"></tbody>
+                </table>
+            </section>
+
+            <section id="section-artists" class="section">
+                <div class="section-header">
+                    <h2>إدارة الفنانين</h2>
+                    <button id="add-artist-btn" class="btn-primary">+ إضافة فنان</button>
+                </div>
+
+                <div id="artist-form" class="form-card" style="display:none;">
+                    <h3>أضف فنان جديد</h3>
+                    <form id="artistForm">
+                        <div class="form-group">
+                            <label>اسم الفنان</label>
+                            <input type="text" id="artist-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>نبذة</label>
+                            <textarea id="artist-bio" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>صورة الفنان</label>
+                            <input type="file" id="artist-image" accept=".jpg,.png">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">حفظ</button>
+                            <button type="button" id="cancel-artist-btn" class="btn-secondary">إلغاء</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="artists-grid" class="grid"></div>
+            </section>
+
+            <section id="section-subscriptions" class="section">
+                <h2>إدارة خطط الاشتراك</h2>
+                <table id="subscriptions-table">
+                    <thead>
+                        <tr>
+                            <th>الخطة</th>
+                            <th>السعر</th>
+                            <th>المدة</th>
+                            <th>المشتركين</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subscriptions-list"></tbody>
+                </table>
+            </section>
+
+            <section id="section-payments" class="section">
+                <h2>سجل المدفوعات</h2>
+                <table id="payments-table">
+                    <thead>
+                        <tr>
+                            <th>المستخدم</th>
+                            <th>المبلغ</th>
+                            <th>بوابة الدفع</th>
+                            <th>الحالة</th>
+                            <th>التاريخ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="payments-list"></tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+workflows:
+  release-build:
+    name: Release Build
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - |
+        # إنشاء ملف .env من Environment Variables (المخزنة بأمان في Codemagic)
+        echo "APPWRITE_ENDPOINT=$APPWRITE_ENDPOINT" > .env
+        echo "APPWRITE_PROJECT_ID=$APPWRITE_PROJECT_ID" >> .env
+        echo "APPWRITE_DATABASE_ID=$APPWRITE_DATABASE_ID" >> .env
+        echo "KURAIMI_MERCHANT_ID=$KURAIMI_MERCHANT_ID" >> .env
+        echo "KURAIMI_API_KEY=$KURAIMI_API_KEY" >> .env
+        echo "KURAIMI_BASE_URL=$KURAIMI_BASE_URL" >> .env
+      - flutter packages pub get
+      - flutter build apk --release --split-per-abi
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
+    publishing:
+      email:
+        recipients:
+          - mohanadalradhi04@gmail.com
